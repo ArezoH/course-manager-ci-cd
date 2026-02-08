@@ -92,10 +92,10 @@ class CourseServiceTest {
     @Test
     @DisplayName("Should find courses by department ID")
     void testFindByDepartmentId() {
-        when(courseRepository.findByDepartmentId(1L))
+        when(courseRepository.findByDepartment_Id(1L))
                 .thenReturn(List.of(course));
 
-        List<Course> result = courseService.findByDepartmentId(1L);
+        List<Course> result = courseService.findByDepartment_Id(1L);
 
         assertEquals(1, result.size());
         assertEquals("CS101", result.get(0).getCode());

@@ -40,3 +40,7 @@ INSERT INTO enrollments (id, student_name, student_email, enrollment_date, cours
                                                                                           (8, 'Hannah Montana', 'hannah.montana@university.edu', '2025-01-18', 7),
                                                                                           (9, 'Ivan Drago', 'ivan.drago@university.edu', '2025-01-19', 9),
                                                                                           (10, 'Julia Roberts', 'julia.roberts@university.edu', '2025-01-19', 10);
+-- Reset auto-increment counters to avoid primary key conflicts in tests
+ALTER TABLE departments ALTER COLUMN id RESTART WITH 100;
+ALTER TABLE courses ALTER COLUMN id RESTART WITH 100;
+ALTER TABLE enrollments ALTER COLUMN id RESTART WITH 100;

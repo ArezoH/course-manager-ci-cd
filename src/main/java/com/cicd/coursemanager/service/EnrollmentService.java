@@ -25,7 +25,7 @@ public class EnrollmentService {
     }
 
     public List<Enrollment> findByCourseId(Long courseId) {
-        return enrollmentRepository.findByCourseId(courseId);
+        return enrollmentRepository.findByCourse_Id(courseId);
     }
 
     public Enrollment save(Enrollment enrollment) {

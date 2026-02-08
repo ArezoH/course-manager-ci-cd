@@ -24,8 +24,8 @@ public class CourseService {
         return courseRepository.findById(id);
     }
 
-    public List<Course> findByDepartmentId(Long departmentId) {
-        return courseRepository.findByDepartmentId(departmentId);
+    public List<Course> findByDepartment_Id(Long departmentId) {
+        return courseRepository.findByDepartment_Id(departmentId);
     }
 
     public Course save(Course course) {

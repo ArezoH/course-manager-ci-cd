@@ -38,7 +38,7 @@ public class CourseController {
             @RequestParam(required = false) Long departmentId) {
         if (departmentId != null) {
             return ResponseEntity.ok(
-                    courseService.findByDepartmentId(departmentId));
+                    courseService.findByDepartment_Id(departmentId));
         }
         return ResponseEntity.ok(courseService.findAll());
     }
