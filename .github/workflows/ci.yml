@@ -1,0 +1,157 @@
+# ============================================
+# CI Pipeline — Course Manager
+# ============================================
+# Stages:
+#   1. Java environment setup
+#   2. Code formatting & linting (Checkstyle)
+#   3. Unit test execution
+#   4. Integration test execution
+#   5. Docker image build
+#   6. Acceptance test execution
+# ============================================
+
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # ==========================================================
+  # STAGE 1 + 2: Build, Lint, and Unit Tests
+  # ==========================================================
+  build-and-lint:
+    name: "Build, Lint & Unit Tests"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run Checkstyle (linting)
+        run: mvn checkstyle:check -B
+
+      - name: Compile project
+        run: mvn compile -B
+
+      - name: Run unit tests
+        run: mvn test -B
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: target/
+          retention-days: 1
+
+  # ==========================================================
+  # STAGE 3: Integration Tests
+  # ==========================================================
+  integration-tests:
+    name: "Integration Tests"
+    runs-on: ubuntu-latest
+    needs: build-and-lint
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run integration tests
+        run: mvn verify -DskipTests -B
+
+  # ==========================================================
+  # STAGE 4: Docker Build + Acceptance Tests
+  # ==========================================================
+  docker-and-acceptance:
+    name: "Docker Build & Acceptance Tests"
+    runs-on: ubuntu-latest
+    needs: integration-tests
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build Docker image
+        run: docker build -t course-manager:latest .
+
+      - name: Start Docker Compose
+        run: docker compose up -d
+
+      - name: Wait for application health
+        run: |
+          echo "Waiting for application to start..."
+          for i in $(seq 1 30); do
+            if curl -s http://localhost:8080/api/departments > /dev/null 2>&1; then
+              echo "Application is ready!"
+              exit 0
+            fi
+            echo "Attempt $i/30 — waiting 5 seconds..."
+            sleep 5
+          done
+          echo "Application failed to start!"
+          docker compose logs
+          exit 1
+
+      - name: Run acceptance tests (curl verification)
+        run: |
+          echo "=== Testing GET /api/departments ==="
+          curl -s http://localhost:8080/api/departments | head -20
+
+          echo ""
+          echo "=== Testing GET /api/courses ==="
+          curl -s http://localhost:8080/api/courses | head -20
+
+          echo ""
+          echo "=== Testing GET /api/enrollments ==="
+          curl -s http://localhost:8080/api/enrollments | head -20
+
+          echo ""
+          echo "=== Testing GET /api/departments/1 ==="
+          RESULT=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api/departments/1)
+          if [ "$RESULT" -ne 200 ]; then
+            echo "FAIL: Expected 200, got $RESULT"
+            exit 1
+          fi
+          echo "PASS: GET /api/departments/1 returned 200"
+
+          echo ""
+          echo "=== Testing POST /api/departments ==="
+          RESULT=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST http://localhost:8080/api/departments \
+            -H "Content-Type: application/json" \
+            -d '{"name":"Test Department","description":"Created in CI"}')
+          if [ "$RESULT" -ne 201 ]; then
+            echo "FAIL: Expected 201, got $RESULT"
+            exit 1
+          fi
+          echo "PASS: POST /api/departments returned 201"
+
+          echo ""
+          echo "=== All acceptance tests passed! ==="
+
+      - name: Stop Docker Compose
+        if: always()
+        run: docker compose down -v
