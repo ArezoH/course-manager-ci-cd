@@ -1,0 +1,129 @@
+### ============================================
+### Course Manager — API Test File
+### Use with IntelliJ HTTP Client (click green play buttons)
+### ============================================
+
+### ==================== DEPARTMENTS ====================
+
+### Get all departments
+GET http://localhost:8080/api/departments
+Accept: application/json
+
+###
+
+### Get department by ID
+GET http://localhost:8080/api/departments/1
+Accept: application/json
+
+###
+
+### Get department that doesn't exist (should return 404)
+GET http://localhost:8080/api/departments/999
+Accept: application/json
+
+###
+
+### Create a new department
+POST http://localhost:8080/api/departments
+Content-Type: application/json
+
+{
+  "name": "Music",
+  "description": "Study of sound and rhythm"
+}
+
+###
+
+### Delete a department
+DELETE http://localhost:8080/api/departments/11
+Accept: application/json
+
+###
+
+### ==================== COURSES ====================
+
+### Get all courses
+GET http://localhost:8080/api/courses
+Accept: application/json
+
+###
+
+### Get course by ID
+GET http://localhost:8080/api/courses/1
+Accept: application/json
+
+###
+
+### Get courses filtered by department
+GET http://localhost:8080/api/courses?departmentId=1
+Accept: application/json
+
+###
+
+### Get course that doesn't exist (should return 404)
+GET http://localhost:8080/api/courses/999
+Accept: application/json
+
+###
+
+### Create a new course
+POST http://localhost:8080/api/courses
+Content-Type: application/json
+
+{
+  "name": "Machine Learning",
+  "code": "CS401",
+  "description": "Introduction to ML algorithms",
+  "credits": 4,
+  "departmentId": 1
+}
+
+###
+
+### Delete a course
+DELETE http://localhost:8080/api/courses/11
+Accept: application/json
+
+###
+
+### ==================== ENROLLMENTS ====================
+
+### Get all enrollments
+GET http://localhost:8080/api/enrollments
+Accept: application/json
+
+###
+
+### Get enrollment by ID
+GET http://localhost:8080/api/enrollments/1
+Accept: application/json
+
+###
+
+### Get enrollments filtered by course
+GET http://localhost:8080/api/enrollments?courseId=1
+Accept: application/json
+
+###
+
+### Get enrollment that doesn't exist (should return 404)
+GET http://localhost:8080/api/enrollments/999
+Accept: application/json
+
+###
+
+### Create a new enrollment
+POST http://localhost:8080/api/enrollments
+Content-Type: application/json
+
+{
+  "studentName": "John Doe",
+  "studentEmail": "john.doe@university.edu",
+  "courseId": 1
+}
+
+###
+
+### Delete an enrollment
+DELETE http://localhost:8080/api/enrollments/11
+Accept: application/json

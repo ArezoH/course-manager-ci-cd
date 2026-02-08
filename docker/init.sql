@@ -3,6 +3,34 @@
 -- Runs automatically on first container start
 -- ============================================
 
+-- Create tables
+CREATE TABLE IF NOT EXISTS departments (
+                                           id          BIGSERIAL PRIMARY KEY,
+                                           name        VARCHAR(100) NOT NULL UNIQUE,
+    description VARCHAR(255)
+    );
+
+CREATE TABLE IF NOT EXISTS courses (
+                                       id            BIGSERIAL PRIMARY KEY,
+                                       name          VARCHAR(100) NOT NULL,
+    code          VARCHAR(20)  NOT NULL UNIQUE,
+    description   VARCHAR(500),
+    credits       INTEGER      NOT NULL,
+    department_id BIGINT       NOT NULL,
+    CONSTRAINT fk_course_department
+    FOREIGN KEY (department_id) REFERENCES departments (id)
+    );
+
+CREATE TABLE IF NOT EXISTS enrollments (
+                                           id              BIGSERIAL PRIMARY KEY,
+                                           student_name    VARCHAR(100) NOT NULL,
+    student_email   VARCHAR(100) NOT NULL,
+    enrollment_date DATE         NOT NULL,
+    course_id       BIGINT       NOT NULL,
+    CONSTRAINT fk_enrollment_course
+    FOREIGN KEY (course_id) REFERENCES courses (id)
+    );
+
 -- 10 Departments
 INSERT INTO departments (name, description) VALUES
                                                 ('Computer Science', 'Study of computation and information processing'),
