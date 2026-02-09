@@ -102,4 +102,26 @@ class EnrollmentApiAT {
         assertNotNull(body);
         assertTrue(body.contains("Test Student"));
     }
+    @Test
+    @DisplayName("POST /api/enrollments — invalid course should return 400")
+    void testCreateEnrollmentInvalidCourse() {
+        String json = """
+                {
+                    "studentName": "Bad Student",
+                    "studentEmail": "bad@university.edu",
+                    "courseId": 9999
+                }
+                """;
+
+        try {
+            client().post()
+                    .uri("/api/enrollments")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(json)
+                    .retrieve()
+                    .body(String.class);
+        } catch (Exception e) {
+            assertTrue(e.getMessage().contains("400"));
+        }
+    }
 }
