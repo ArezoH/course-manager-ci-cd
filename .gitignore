@@ -1,10 +1,46 @@
-HELP.md
+# Build output
 target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+build/
+out/
+bin/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.nar
 
-### STS ###
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+**/maven-wrapper.properties
+dependency-reduced-pom.xml
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dataSources/
+.idea/dataSources.local.xml
+.idea/shelf/
+.idea/dictionaries/
+.idea/*.xml
+.idea/codeStyles/
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/vcs.xml
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/aws.xml
+out/
+
+### Eclipse/STS ###
 .apt_generated
 .classpath
 .factorypath
@@ -12,12 +48,8 @@ target/
 .settings
 .springBeans
 .sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+.metadata/
+tmp/
 
 ### NetBeans ###
 /nbproject/private/
@@ -25,9 +57,106 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
+.history/
+*.code-workspace
+
+# Operating System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+.AppleDouble
+.LSOverride
+*~
+[Tt]humbs.db
+$RECYCLE.BIN/
+*.lnk
+
+# Log files
+*.log
+logs/
+**/logs/
+**/*.log
+**/*.log.*
+**/hs_err_pid*.log
+
+# Test and coverage reports
+**/test-output/
+**/test-results/
+**/reports/
+**/surefire-reports/
+**/failsafe-reports/
+jacoco.exec
+*.exec
+*.gcov
+*.lcov
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Docker (keep main docker folder, ignore overrides)
+!docker/
+**/docker-compose.override.yml
+**/docker-compose.*.yml
+
+# Package Files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.rar
+*.tar
+*.tgz
+
+# Temp and backup files
+*.tmp
+*.temp
+*.orig
+*.rej
+*.bak
+*.swp
+*.swo
+*~
+~$*
+
+# Other IDE/Editor files
+*.sublime-workspace
+*.sublime-project
+
+# Database files
+*.db
+*.sqlite
+*.h2.db
+
+# Application Properties (local/dev/test variants)
+**/application-local.properties
+**/application-dev.properties
+**/application-test.properties
+
+# Migration files
+**/flyway-*.sql
+liquibase.properties
+
+# Build tool caches
+**/.gradle/
+**/.nb-gradle/
+
+# Package-specific dependencies
+**/node_modules/
+**/bower_components/
+
+# Checkstyle
+**/target/checkstyle-cachefile
+**/target/checkstyle-result.xml
+
+# Documentation (auto-generated)
+**/docs/api/
